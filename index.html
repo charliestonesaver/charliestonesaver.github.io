@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CharlieStone Saver — Real NASDAQ Trades. Real Education.</title>
+<meta name="description" content="Live NASDAQ trade execution and honest forex education for beginners to professionals. No face. No hype. Just charts, strategy and results.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky: #C8D6E0;
+    --sky-light: #E2EAEE;
+    --sky-bright: #A0B4BF;
+    --sky-glow: rgba(200,214,224,0.12);
+    --black: #FFFFFF;
+    --navy: #0A1628;
+    --navy-2: #0D1F38;
+    --navy-3: #112448;
+    --navy-4: #1A3260;
+    --text: #0D1F38;
+    --text-muted: #4A5568;
+    --text-dim: #8A96A0;
+    --green: #3DDBA8;
+    --red: #F85149;
+    --border: rgba(200,214,224,0.12);
+    --border-dim: rgba(200,214,224,0.05);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #FFFFFF;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  
+
+  
+
+  /* GLOW ORBS */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(80px);
+  }
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(200,214,224,0.07) 0%, transparent 70%);
+    top: -100px; left: -100px;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(10,22,40,0.6) 0%, transparent 70%);
+    bottom: 100px; right: -80px;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 0 5%;
+    height: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 0.5px solid rgba(10,22,40,0.1);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 21px;
+    letter-spacing: 2.5px;
+    color: #0A1628;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .nav-logo .dot { color: var(--sky-light); font-size: 28px; line-height: 1; margin-top: -3px; }
+  .nav-logo span { color: var(--text-muted); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: #4A5568;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--sky); }
+
+  .nav-cta {
+    background: #0A1628 !important;
+    color: #FFFFFF !important;
+    padding: 8px 22px !important;
+    border-radius: 4px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.2px !important;
+    text-transform: none !important;
+    font-size: 13px !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: #1A3260 !important; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 110px 5% 80px;
+    z-index: 1;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(200,214,224,0.07);
+    border: 0.5px solid var(--border);
+    color: var(--sky);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+  }
+
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.4); }
+  }
+  .orange-dot {
+    width: 6px; height: 6px;
+    background: #F4A261;
+    border-radius: 50%;
+    opacity: 0.7;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 5.5vw, 82px);
+    line-height: 0.95;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 .sky { color: #0A1628; }
+  .hero h1 .outline {
+    -webkit-text-stroke: 1.5px #0A1628;
+    color: transparent;
+  }
+  .hero h1 .white { color: #0A1628; }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 40px;
+    max-width: 460px;
+  }
+
+  .hero-sub strong { color: #0A1628; font-weight: 600; }
+
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: #0A1628;
+    color: #FFFFFF;
+    padding: 13px 26px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    background: #1A3260;
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: #0A1628;
+    padding: 13px 26px;
+    border-radius: 4px;
+    font-weight: 400;
+    font-size: 14px;
+    text-decoration: none;
+    border: 0.5px solid rgba(10,22,40,0.3);
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover {
+    border-color: #0A1628;
+    color: #0A1628;
+    background: rgba(10,22,40,0.05);
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(10,22,40,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 48px;
+    border: 0.5px solid rgba(10,22,40,0.1);
+  }
+
+  .stat-item {
+    background: #F0F4F8;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 26px;
+    font-weight: 500;
+    color: #0A1628;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-top: 5px;
+  }
+
+  /* CHART WIDGET */
+  .chart-widget {
+    background: var(--navy-2);
+    border-radius: 14px;
+    border: 0.5px solid var(--border);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 60px rgba(200,214,224,0.03);
+  }
+
+  .chart-header {
+    padding: 16px 20px;
+    border-bottom: 0.5px solid var(--border-dim);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--navy);
+  }
+
+  .chart-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .chart-price {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    margin-top: 2px;
+  }
+
+  .chart-change {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+    background: rgba(61,219,168,0.1);
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  .chart-body {
+    padding: 20px;
+    height: 230px;
+    position: relative;
+  }
+
+  .trade-card {
+    position: absolute;
+    bottom: 24px;
+    right: 20px;
+    background: var(--navy-3);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .trade-card-label {
+    color: var(--text-muted);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+
+  .trade-card-profit {
+    color: var(--green);
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  /* TICKER */
+  .ticker-wrap {
+    background: #0A1628;
+    border-top: 0.5px solid var(--border-dim);
+    border-bottom: 0.5px solid var(--border-dim);
+    overflow: hidden;
+    padding: 11px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .ticker-inner {
+    display: flex;
+    gap: 52px;
+    animation: ticker 28s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .ticker-sym { color: var(--sky-light); font-weight: 500; }
+  .ticker-up { color: var(--green); }
+  .ticker-down { color: var(--red); }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 1; }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 5%;
+  }
+
+  .section-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #0A1628;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-tag::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: #0A1628;
+    opacity: 0.4;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 4vw, 56px);
+    letter-spacing: 1.5px;
+    line-height: 1;
+    margin-bottom: 18px;
+    color: #0A1628;
+  }
+
+  .section-title .sky { color: #0A1628; }
+
+  .section-sub {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 540px;
+    line-height: 1.75;
+  }
+
+  /* AUDIENCE */
+  .audience-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 56px;
+  }
+
+  .audience-card {
+    background: #F7F9FC;
+    border: 0.5px solid rgba(10,22,40,0.1);
+    border-radius: 12px;
+    padding: 36px 28px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .audience-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #0A1628, transparent);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .audience-card:hover { border-color: rgba(10,22,40,0.3); transform: translateY(-3px); }
+  .audience-card:hover::before { opacity: 1; }
+
+  .audience-icon {
+    width: 44px; height: 44px;
+    background: rgba(200,214,224,0.05);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .audience-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: #0A1628;
+    margin-bottom: 12px;
+  }
+
+  .audience-card p {
+    font-size: 14px;
+    color: #4A5568;
+    line-height: 1.75;
+  }
+
+  /* FEATURES */
+  .features-section {
+    background: #F0F4F8;
+    border-top: 0.5px solid rgba(10,22,40,0.08);
+    border-bottom: 0.5px solid rgba(10,22,40,0.08);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: rgba(10,22,40,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 56px;
+    border: 0.5px solid rgba(10,22,40,0.08);
+  }
+
+  .feature-card {
+    background: #FFFFFF;
+    padding: 40px 36px;
+    transition: background 0.2s;
+  }
+
+  .feature-card:hover { background: #F7F9FC; }
+
+  .feature-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: #FFFFFF;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+    display: inline-block;
+    background: rgba(100, 116, 139, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 5px 14px;
+    border-radius: 100px;
+    box-shadow: 0 2px 8px rgba(10,22,40,0.10);
+    border: 0.5px solid rgba(255,255,255,0.25);
+  }
+
+  .feature-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    color: #0A1628;
+  }
+
+  .feature-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+
+  /* CHECKLIST */
+  .checklist-section {
+    background: #FFFFFF;
+    border-top: 0.5px solid var(--border-dim);
+  }
+
+  .checklist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .checklist-list {
+    list-style: none;
+    margin-top: 32px;
+  }
+
+  .checklist-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 15px 0;
+    border-bottom: 0.5px solid var(--border-dim);
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .checklist-list li:last-child { border-bottom: none; }
+
+  .checklist-list li { color: #4A5568; }
+
+  .check-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--sky);
+    background: rgba(200,214,224,0.05);
+    border: 0.5px solid var(--border);
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .check-text strong {
+    color: #0A1628;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+    font-size: 14px;
+  }
+
+  /* CHECKLIST CARD */
+  .checklist-card {
+    background: #0D1F38;
+    border: 0.5px solid rgba(10,22,40,0.2);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .checklist-card-header {
+    background: var(--navy);
+    padding: 18px 24px;
+    border-bottom: 0.5px solid rgba(10,22,40,0.1);
+  }
+
+  .checklist-card-header h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: var(--sky);
+  }
+
+  .checklist-card-header p {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  .checklist-card-body { padding: 20px 24px; }
+
+  .check-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 0.5px solid var(--border-dim);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .check-row:last-child { border-bottom: none; }
+
+  .check-box {
+    width: 16px; height: 16px;
+    border: 1px solid var(--sky);
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 9px;
+    color: var(--sky);
+  }
+
+  .check-box.checked { background: rgba(200,214,224,0.08); }
+  .check-row-text { color: var(--text-muted); }
+  .check-row-text.active { color: var(--sky-light); }
+
+  .checklist-card-footer {
+    padding: 14px 24px;
+    background: rgba(200,214,224,0.03);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 0.5px solid var(--border-dim);
+  }
+
+  .checklist-card-footer span {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--green);
+  }
+
+  /* COMMUNITY */
+  .community-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 56px;
+  }
+
+  .community-card {
+    background: #FFFFFF;
+    border: 0.5px solid rgba(10,22,40,0.1);
+    border-radius: 14px;
+    padding: 32px 28px;
+    transition: all 0.22s;
+  }
+
+  .community-card:hover {
+    border-color: rgba(10,22,40,0.3);
+    transform: translateY(-2px);
+  }
+
+  .community-card.featured {
+    border-color: var(--sky);
+    background: linear-gradient(160deg, var(--navy-2) 0%, rgba(200,214,224,0.03) 100%);
+    box-shadow: 0 0 40px rgba(200,214,224,0.05);
+  }
+
+  .community-badge {
+    display: inline-block;
+    background: rgba(200,214,224,0.08);
+    color: var(--sky);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 18px;
+    border: 0.5px solid var(--border);
+  }
+
+  .community-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    color: #0A1628;
+  }
+
+  .community-price {
+    font-family: 'DM Mono', monospace;
+    font-size: 32px;
+    font-weight: 500;
+    color: #0A1628;
+    margin-bottom: 6px;
+  }
+
+  .community-price span {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .community-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 22px;
+    line-height: 1.65;
+  }
+
+  .community-features {
+    list-style: none;
+    margin-bottom: 26px;
+  }
+
+  .community-features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 5px 0;
+  }
+
+  .community-features li::before {
+    content: '';
+    width: 4px; height: 4px;
+    background: #0A1628;
+    border-radius: 50%;
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
+
+  /* CTA STRIP */
+  .cta-strip {
+    background: var(--navy);
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid rgba(10,22,40,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-strip::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 200px;
+    background: radial-gradient(ellipse, rgba(200,214,224,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 90px 5%;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-inner h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(38px, 5vw, 68px);
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 18px;
+    color: #FFFFFF;
+  }
+
+  .cta-inner h2 .sky { color: #87CEEB; }
+
+  .cta-inner p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.7);
+    max-width: 480px;
+    margin: 0 auto 36px;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* LINKS */
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 56px;
+  }
+
+  .link-card {
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    padding: 28px 20px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.22s;
+    display: block;
+  }
+
+  .link-card:hover {
+    border-color: transparent;
+    transform: translateY(-4px);
+    background: transparent;
+  }
+
+  .link-icon {
+    font-size: 40px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .link-card h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: #0A1628;
+    margin-bottom: 0;
+  }
+
+  .link-card p {
+    display: none;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 0.5px solid var(--border-dim);
+    padding: 48px 5%;
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2.5px;
+    color: #0A1628;
+  }
+
+  .footer-logo span { color: #4A5568; }
+
+  .footer-disclaimer {
+    font-size: 11px;
+    color: var(--text-dim);
+    max-width: 460px;
+    line-height: 1.65;
+  }
+
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    .hero-grid, .checklist-grid { grid-template-columns: 1fr; gap: 40px; }
+    .audience-grid, .community-cards { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .links-grid { grid-template-columns: repeat(2, 1fr); }
+    .nav-links { display: none; }
+    .footer-inner { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">CHARLIE<span>STONE</span>&nbsp;SAVER</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#strategy">Strategy</a></li>
+    <li><a href="#community">Community</a></li>
+    <li><a href="#links">Connect</a></li>
+    <li><a href="https://www.youtube.com/@CharlieStone_Saver" target="_blank" rel="noopener" class="nav-cta">Watch Free</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-tag">
+        <span class="live-dot"></span><span class="orange-dot" style="margin-left:4px;"></span>
+        Live NASDAQ Execution
+      </div>
+      <h1>
+        <span class="white">CHARLIE</span><br>
+        <span class="sky">STONE</span><br>
+        <span class="outline">SAVER</span>
+      </h1>
+      <p class="hero-sub">
+        Real money. Real charts. Real NASDAQ execution — broken down for <strong>beginners, intermediates and struggling professionals.</strong> No face. No hype. No fake signals.
+      </p>
+      <div class="hero-actions">
+        <a href="https://www.youtube.com/@CharlieStone_Saver" target="_blank" rel="noopener" class="btn-primary">Watch Free on YouTube</a>
+        <a href="#checklist" class="btn-secondary">Free Trade Checklist</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">1:2</span>
+          <div class="stat-label">Min Risk Reward</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">6</span>
+          <div class="stat-label">Checkpoint System</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">0</span>
+          <div class="stat-label">Fluff or Hype</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART WIDGET -->
+    <div class="chart-widget">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">NAS100 · 15M · LIVE</div>
+          <div class="chart-price">18,742.50</div>
+        </div>
+        <div class="chart-change">▲ +1.24%</div>
+      </div>
+      <div class="chart-body">
+        <svg width="100%" height="100%" viewBox="0 0 420 180" preserveAspectRatio="none">
+          <line x1="0" y1="45" x2="420" y2="45" stroke="rgba(200,214,224,0.05)" stroke-width="0.5"/>
+          <line x1="0" y1="90" x2="420" y2="90" stroke="rgba(200,214,224,0.05)" stroke-width="0.5"/>
+          <line x1="0" y1="135" x2="420" y2="135" stroke="rgba(200,214,224,0.05)" stroke-width="0.5"/>
+          <defs>
+            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#C8D6E0" stop-opacity="0.12"/>
+              <stop offset="100%" stop-color="#C8D6E0" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,140 L28,130 L56,125 L84,118 L112,122 L140,112 L168,105 L196,108 L224,95 L252,88 L280,78 L308,72 L336,60 L364,52 L392,40 L420,30 L420,180 L0,180 Z" fill="url(#areaGrad)"/>
+          <polyline points="0,140 28,130 56,125 84,118 112,122 140,112 168,105 196,108 224,95 252,88 280,78 308,72 336,60 364,52 392,40 420,30" fill="none" stroke="#C8D6E0" stroke-width="1.5"/>
+          <circle cx="168" cy="105" r="4" fill="#C8D6E0" stroke="#0A1628" stroke-width="2"/>
+          <line x1="168" y1="60" x2="420" y2="60" stroke="#3DDBA8" stroke-width="0.5" stroke-dasharray="4,4"/>
+          <line x1="168" y1="125" x2="420" y2="125" stroke="#F85149" stroke-width="0.5" stroke-dasharray="4,4"/>
+          <text x="396" y="56" fill="#3DDBA8" font-size="8" font-family="DM Mono,monospace" text-anchor="end">TP</text>
+          <text x="396" y="121" fill="#F85149" font-size="8" font-family="DM Mono,monospace" text-anchor="end">SL</text>
+          <text x="170" y="100" fill="#C8D6E0" font-size="8" font-family="DM Mono,monospace">ENTRY</text>
+        </svg>
+        <div class="trade-card">
+          <div class="trade-card-label">Last closed trade</div>
+          <div class="trade-card-profit">+£147.20</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <div class="ticker-item"><span class="ticker-sym">NAS100</span> 18,742 <span class="ticker-up">▲ +1.24%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">EUR/USD</span> 1.0847 <span class="ticker-up">▲ +0.32%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">GBP/USD</span> 1.2734 <span class="ticker-down">▼ -0.18%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">USD/JPY</span> 149.82 <span class="ticker-up">▲ +0.45%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">XAU/USD</span> 2,341 <span class="ticker-up">▲ +0.87%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">SPX500</span> 5,248 <span class="ticker-down">▼ -0.22%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">BTC/USD</span> 67,420 <span class="ticker-up">▲ +2.11%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">NAS100</span> 18,742 <span class="ticker-up">▲ +1.24%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">EUR/USD</span> 1.0847 <span class="ticker-up">▲ +0.32%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">GBP/USD</span> 1.2734 <span class="ticker-down">▼ -0.18%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">USD/JPY</span> 149.82 <span class="ticker-up">▲ +0.45%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">XAU/USD</span> 2,341 <span class="ticker-up">▲ +0.87%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">SPX500</span> 5,248 <span class="ticker-down">▼ -0.22%</span></div>
+    <div class="ticker-item"><span class="ticker-sym">BTC/USD</span> 67,420 <span class="ticker-up">▲ +2.11%</span></div>
+  </div>
+</div>
+
+<!-- WHO IS THIS FOR -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-tag">Who This Is For</div>
+    <h2 class="section-title">BUILT FOR <span class="sky">REAL</span> TRADERS</h2>
+    <p class="section-sub">Whether you are starting from zero or stuck in a losing cycle — CharlieStone Saver was built for you.</p>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <div class="audience-icon">📊</div>
+        <h3>Complete Beginners</h3>
+        <p>You have heard about forex and NASDAQ but have no idea where to start. We take you from zero — no jargon, no assumptions, just clear execution-first education.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">📈</div>
+        <h3>Intermediate Traders</h3>
+        <p>You know the basics. You understand support and resistance. But you keep losing. You need a structured system with real entries, real stop losses and real results.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">🧠</div>
+        <h3>Struggling Professionals</h3>
+        <p>You have the technical knowledge. The problem is discipline, consistency and the psychological side that nobody's course covers properly. That is what we fix here.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU GET -->
+<section id="strategy" class="features-section">
+  <div class="section-inner">
+    <div class="section-tag">What You Get</div>
+    <h2 class="section-title">REAL EDUCATION.<br><span class="sky">ZERO FLUFF.</span></h2>
+    <p class="section-sub">Every piece of content is built around one thing — real NASDAQ execution you can replicate yourself.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-num">01 —</div>
+        <h3>Live Trade Breakdowns</h3>
+        <p>Screen recordings of real NASDAQ trades — entry, management and exit. With full voiceover explaining every single decision before, during and after execution. This is what most educators cannot give you — proof.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">02 —</div>
+        <h3>The Structure Retest Entry</h3>
+        <p>One strategy. Fully documented. Six checkpoints. Used on the NASDAQ every single week. No indicator stacking — just a repeatable process built around key levels, retests and confirmation candles.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">03 —</div>
+        <h3>Risk Management Framework</h3>
+        <p>Position sizing, stop placement with stop-hunt buffer, take profit scaling at 1:2 and 1:3 ratios and the 1-2% account risk rule. The complete framework that keeps you in the game long enough to get good.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">04 —</div>
+        <h3>Trading Psychology</h3>
+        <p>FOMO, revenge trading, emotional stop-outs, the relationship with losing — all covered from real experience. Not theory from a textbook. Lessons learned from actual account damage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST SECTION -->
+<section id="checklist" class="checklist-section">
+  <div class="section-inner">
+    <div class="checklist-grid">
+      <div>
+        <div class="section-tag">Free Download</div>
+        <h2 class="section-title">THE PRE-TRADE<br><span class="sky">CHECKLIST</span></h2>
+        <p class="section-sub">Six questions. Every trade. No exceptions. The exact checklist used before every NASDAQ execution.</p>
+        <ul class="checklist-list">
+          <li>
+            <span class="check-num">01</span>
+            <div class="check-text"><strong>Trend Direction Confirmed</strong>Daily chart checked. Clear higher highs or lower lows identified.</div>
+          </li>
+          <li>
+            <span class="check-num">02</span>
+            <div class="check-text"><strong>Key Level Identified</strong>4H chart checked. Significant level respected at least twice.</div>
+          </li>
+          <li>
+            <span class="check-num">03</span>
+            <div class="check-text"><strong>Retest Confirmed</strong>Price has broken through the level and is now retesting it.</div>
+          </li>
+          <li>
+            <span class="check-num">04</span>
+            <div class="check-text"><strong>Confirmation Candle Present</strong>15M rejection candle fully closed at the level.</div>
+          </li>
+          <li>
+            <span class="check-num">05</span>
+            <div class="check-text"><strong>Stop Loss Correctly Placed</strong>Set with buffer. Accounts for stop hunts below key levels.</div>
+          </li>
+          <li>
+            <span class="check-num">06</span>
+            <div class="check-text"><strong>Risk Reward At Least 1:2</strong>Position sized at 1-2% account risk maximum.</div>
+          </li>
+        </ul>
+        <br>
+        <a href="https://charliestonesaver.gumroad.com" target="_blank" rel="noopener" class="btn-primary">Download Free — Gumroad</a>
+      </div>
+
+      <div class="checklist-card">
+        <div class="checklist-card-header">
+          <h4>CHARLIESTONESAVER</h4>
+          <p>Pre-Trade Execution Checklist · NAS100</p>
+        </div>
+        <div class="checklist-card-body">
+          <div class="check-row">
+            <div class="check-box checked">✓</div>
+            <span class="check-row-text active">Daily trend: BULLISH confirmed</span>
+          </div>
+          <div class="check-row">
+            <div class="check-box checked">✓</div>
+            <span class="check-row-text active">Key level: 18,450 — 3x respected</span>
+          </div>
+          <div class="check-row">
+            <div class="check-box checked">✓</div>
+            <span class="check-row-text active">Retest: Price retesting from above</span>
+          </div>
+          <div class="check-row">
+            <div class="check-box checked">✓</div>
+            <span class="check-row-text active">Confirmation: Bullish engulfing 15M</span>
+          </div>
+          <div class="check-row">
+            <div class="check-box checked">✓</div>
+            <span class="check-row-text active">SL: 18,420 (buffer: 15pts)</span>
+          </div>
+          <div class="check-row">
+            <div class="check-box checked">✓</div>
+            <span class="check-row-text active">RR: 1:2.3 · Risk: 1.5% account</span>
+          </div>
+        </div>
+        <div class="checklist-card-footer">
+          <span>✓ ALL 6 CONFIRMED — EXECUTE</span>
+          <span style="color: var(--text-dim); font-size: 10px; font-family: 'DM Mono', monospace;">CSS · 2024</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY PRICING TABLE -->
+<section id="community" style="
+  background: linear-gradient(135deg, #0B1020 0%, #11152F 50%, #0D1028 100%);
+  box-shadow: inset 0 0 100px rgba(78,112,255,0.15);
+  padding: 100px 40px;
+  position: relative;
+  overflow: hidden;
+">
+
+<style>
+/* ── PRICING SECTION ─────────────────────────────────────────── */
+.pricing-wrap {
+  max-width: 1600px;
+  margin: 0 auto;
+  font-family: 'Inter', 'Poppins', Arial, sans-serif;
+}
+.pricing-heading {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 800;
+  color: #FFFFFF;
+  text-align: center;
+  margin-bottom: 20px;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+.pricing-sub {
+  font-size: 18px;
+  font-weight: 400;
+  color: #B8C0D9;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+
+/* TOGGLE */
+.billing-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+.billing-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+.toggle-track {
+  width: 52px;
+  height: 28px;
+  background: #4E70FF;
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.toggle-thumb {
+  width: 22px;
+  height: 22px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.3s;
+}
+.toggle-track.yearly .toggle-thumb { transform: translateX(24px); }
+.savings-badge {
+  background: #FF7A59;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  margin-left: 6px;
+}
+
+/* TABLE CONTAINER */
+.pricing-table {
+  background: #13172D;
+  border: 2px solid rgba(93,109,255,0.35);
+  border-radius: 24px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 40px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+/* PLAN CARD */
+.plan-card {
+  padding: 36px 28px;
+  border-radius: 20px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+  background: transparent;
+}
+.plan-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 0 30px rgba(93,109,255,0.20), 0 20px 40px rgba(0,0,0,0.35);
+  z-index: 2;
+}
+.plan-card.highlighted {
+  background: linear-gradient(160deg, rgba(78,112,255,0.12) 0%, rgba(93,109,255,0.06) 100%);
+  border: 1px solid rgba(93,109,255,0.5);
+}
+
+/* POPULAR BADGE */
+.popular-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #4E70FF, #7B8CFF);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(78,112,255,0.4);
+}
+
+/* PLAN TITLE */
+.plan-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  letter-spacing: 0.3px;
+}
+
+/* PRICE */
+.plan-price-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.plan-price {
+  font-size: 58px;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1;
+}
+.plan-period {
+  font-size: 18px;
+  font-weight: 500;
+  color: #D0D4E4;
+  padding-bottom: 8px;
+}
+.plan-billed {
+  font-size: 16px;
+  font-weight: 500;
+  color: #AEB6D0;
+  margin-bottom: 12px;
+}
+.plan-savings {
+  font-size: 15px;
+  font-weight: 500;
+  color: #CBD1E6;
+  margin-bottom: 24px;
+  min-height: 22px;
+}
+
+/* CTA BUTTON */
+.plan-btn {
+  display: block;
+  width: 100%;
+  height: 56px;
+  background: #FFFFFF;
+  color: #151515;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  text-align: center;
+  line-height: 56px;
+  text-decoration: none;
+  margin-bottom: 32px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  font-family: 'Inter', 'Poppins', Arial, sans-serif;
+}
+.plan-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255,255,255,0.2);
+}
+.plan-btn.btn-glow {
+  background: linear-gradient(90deg, #4E70FF, #7B8CFF);
+  color: #FFFFFF;
+  box-shadow: 0 4px 20px rgba(78,112,255,0.4);
+}
+.plan-btn.btn-glow:hover {
+  box-shadow: 0 8px 30px rgba(78,112,255,0.6);
+}
+
+/* FEATURES */
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.plan-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #FFFFFF;
+  line-height: 1.8;
+  padding: 9px 0;
+}
+.plan-features li .chk {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #4E70FF;
+}
+.plan-features li.muted { color: rgba(255,255,255,0.35); }
+.plan-features li.muted .chk { color: rgba(255,255,255,0.2); }
+.feature-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.12);
+  margin: 16px 0;
+}
+
+/* VERTICAL DIVIDERS between cards */
+.plan-card + .plan-card {
+  border-left: 1px solid rgba(255,255,255,0.07);
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .pricing-table {
+    grid-template-columns: 1fr;
+    padding: 24px;
+    gap: 16px;
+  }
+  .plan-card + .plan-card { border-left: none; border-top: 1px solid rgba(255,255,255,0.07); }
+  .plan-price { font-size: 42px; }
+  .plan-title { font-size: 22px; }
+  .plan-features li { font-size: 15px; }
+  .plan-btn { height: 52px; line-height: 52px; }
+  .plan-card { padding: 24px; }
+}
+</style>
+
+<div class="pricing-wrap">
+
+  <!-- Heading -->
+  <h2 class="pricing-heading">Choose Your Trading Plan</h2>
+  <p class="pricing-sub">Professional NASDAQ &amp; forex education, live trade analysis and mentorship — designed to help you become a consistently profitable trader.</p>
+
+  <!-- Toggle -->
+  <div class="billing-toggle">
+    <span class="billing-label" id="lbl-monthly">Monthly</span>
+    <div class="toggle-track yearly" id="billing-toggle" onclick="toggleBilling()">
+      <div class="toggle-thumb"></div>
+    </div>
+    <span class="billing-label" id="lbl-yearly">Yearly <span class="savings-badge">Save up to 17%</span></span>
+  </div>
+
+  <!-- Pricing Table -->
+  <div class="pricing-table">
+
+    <!-- PLAN 1: STARTER -->
+    <div class="plan-card">
+      <div class="plan-title">Starter</div>
+      <div class="plan-price-wrap">
+        <span class="plan-price" data-monthly="£0" data-yearly="£0">£0</span>
+        <span class="plan-period">/mo</span>
+      </div>
+      <div class="plan-billed">Free forever</div>
+      <div class="plan-savings">&nbsp;</div>
+      <a href="https://www.youtube.com/@CharlieStone_Saver" target="_blank" rel="noopener" class="plan-btn">Get Started</a>
+      <ul class="plan-features">
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>All YouTube videos</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Weekly NASDAQ breakdowns</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Free pre-trade checklist</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Weekly email insights</li>
+        <div class="feature-divider"></div>
+        <li class="muted"><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Live analysis sessions</li>
+        <li class="muted"><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Setup reviews</li>
+        <li class="muted"><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Strategy vault access</li>
+      </ul>
+    </div>
+
+    <!-- PLAN 2: PROFESSIONAL (HIGHLIGHTED) -->
+    <div class="plan-card highlighted">
+      <div class="popular-badge">⭐ Most Popular</div>
+      <div class="plan-title">Professional</div>
+      <div class="plan-price-wrap">
+        <span class="plan-price" data-monthly="£25" data-yearly="£21">£21</span>
+        <span class="plan-period">/mo</span>
+      </div>
+      <div class="plan-billed" id="billed-pro">Billed Annually</div>
+      <div class="plan-savings" id="savings-pro">Save £48 Per Year</div>
+      <a href="https://whop.com/charliestonesaver/" target="_blank" rel="noopener" class="plan-btn btn-glow">Join Now</a>
+      <ul class="plan-features">
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Everything in Starter</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Weekly live NASDAQ analysis</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Pre-trade setup reviews</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Full strategy vault</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Trading psychology sessions</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Accountability partners</li>
+        <div class="feature-divider"></div>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Founding member rate locked</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Private Discord community</li>
+      </ul>
+    </div>
+
+    <!-- PLAN 3: PREMIUM -->
+    <div class="plan-card">
+      <div class="plan-title">Premium</div>
+      <div class="plan-price-wrap">
+        <span class="plan-price" data-monthly="£97" data-yearly="£80">£80</span>
+        <span class="plan-period">/mo</span>
+      </div>
+      <div class="plan-billed" id="billed-prem">Billed Annually</div>
+      <div class="plan-savings" id="savings-prem">Save £204 Per Year</div>
+      <a href="https://charliestonesaver.gumroad.com" target="_blank" rel="noopener" class="plan-btn">Upgrade</a>
+      <ul class="plan-features">
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Everything in Professional</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Full 14-module video course</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Structure Retest Entry guide</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Risk management calculator</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Psychology framework</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Lifetime course access</li>
+        <div class="feature-divider"></div>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Monthly group Q&amp;A call</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Priority setup reviews</li>
+      </ul>
+    </div>
+
+    <!-- PLAN 4: ELITE -->
+    <div class="plan-card">
+      <div class="plan-title">Elite</div>
+      <div class="plan-price-wrap">
+        <span class="plan-price" data-monthly="£350" data-yearly="£291">£291</span>
+        <span class="plan-period">/mo</span>
+      </div>
+      <div class="plan-billed" id="billed-elite">Billed Annually</div>
+      <div class="plan-savings" id="savings-elite">Save £708 Per Year</div>
+      <a href="mailto:charliestonesaver@gmail.com" class="plan-btn">Join Now</a>
+      <ul class="plan-features">
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Everything in Premium</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1-to-1 monthly mentorship</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Personal trade plan built</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Direct messaging access</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Weekly 1-to-1 review call</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Custom risk framework</li>
+        <div class="feature-divider"></div>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Limited — 5 spots only</li>
+        <li><svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Priority onboarding call</li>
+      </ul>
+    </div>
+
+  </div><!-- end pricing-table -->
+</div><!-- end pricing-wrap -->
+
+<script>
+var isYearly = true;
+var prices = {
+  pro:   { monthly: '£25',  yearly: '£21',  savingsY: 'Save £48 Per Year',   billedY: 'Billed Annually', billedM: 'Billed Monthly', savingsM: '' },
+  prem:  { monthly: '£97',  yearly: '£80',  savingsY: 'Save £204 Per Year',  billedY: 'Billed Annually', billedM: 'Billed Monthly', savingsM: '' },
+  elite: { monthly: '£350', yearly: '£291', savingsY: 'Save £708 Per Year',  billedY: 'Billed Annually', billedM: 'Billed Monthly', savingsM: '' }
+};
+function toggleBilling() {
+  isYearly = !isYearly;
+  var track = document.getElementById('billing-toggle');
+  track.classList.toggle('yearly', isYearly);
+  // Update prices
+  document.querySelector('[data-monthly="£25"]').textContent  = isYearly ? prices.pro.yearly   : prices.pro.monthly;
+  document.querySelector('[data-monthly="£97"]').textContent  = isYearly ? prices.prem.yearly   : prices.prem.monthly;
+  document.querySelector('[data-monthly="£350"]').textContent = isYearly ? prices.elite.yearly  : prices.elite.monthly;
+  // Update billed text
+  document.getElementById('billed-pro').textContent   = isYearly ? prices.pro.billedY   : prices.pro.billedM;
+  document.getElementById('billed-prem').textContent  = isYearly ? prices.prem.billedY  : prices.prem.billedM;
+  document.getElementById('billed-elite').textContent = isYearly ? prices.elite.billedY : prices.elite.billedM;
+  // Update savings
+  document.getElementById('savings-pro').textContent   = isYearly ? prices.pro.savingsY   : prices.pro.savingsM;
+  document.getElementById('savings-prem').textContent  = isYearly ? prices.prem.savingsY  : prices.prem.savingsM;
+  document.getElementById('savings-elite').textContent = isYearly ? prices.elite.savingsY : prices.elite.savingsM;
+}
+</script>
+
+</section>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <div class="cta-inner">
+    <h2>READY TO TRADE<br><span class="sky">WITH CONFIDENCE?</span></h2>
+    <p>Start with the free checklist. Watch the first video. See what real execution looks like.</p>
+    <div class="cta-buttons">
+      <a href="https://www.youtube.com/@CharlieStone_Saver" target="_blank" rel="noopener" class="btn-primary">Watch on YouTube — Free</a>
+      <a href="https://charliestonesaver.gumroad.com" target="_blank" rel="noopener" class="btn-secondary">Download Free Checklist</a>
+    </div>
+  </div>
+</div>
+
+<!-- LINKS -->
+<section id="links">
+  <div class="section-inner">
+    <div class="section-tag">Connect With Us</div>
+    <h2 class="section-title">ALL THE <span class="sky">LINKS</span></h2>
+    <p class="section-sub">Find CharlieStone Saver on every platform.</p>
+    <div style="display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:36px;margin-top:52px;">
+
+      <!-- Facebook -->
+      <a href="https://facebook.com/CharlieStone.Saver" target="_blank" rel="noopener" title="Facebook" style="display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" fill="#1877F2"/><path d="M32 24C32 19.58 28.42 16 24 16C19.58 16 16 19.58 16 24C16 28.01 18.93 31.33 22.75 31.9V26.38H20.72V24H22.75V22.21C22.75 20.2 23.93 19.1 25.77 19.1C26.65 19.1 27.56 19.25 27.56 19.25V21.22H26.55C25.56 21.22 25.25 21.83 25.25 22.46V24H27.47L27.11 26.38H25.25V31.9C29.07 31.33 32 28.01 32 24Z" fill="white"/></svg>
+        <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:#0A1628;font-weight:500;letter-spacing:0.5px;">Facebook</span>
+      </a>
+
+      <!-- Instagram -->
+      <a href="https://instagram.com/charliestonesaver" target="_blank" rel="noopener" title="Instagram" style="display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="ig1" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect width="48" height="48" rx="12" fill="url(#ig1)"/><path d="M24 17.2C21.27 17.2 20.94 17.21 19.88 17.26C18.82 17.31 18.09 17.48 17.45 17.73C16.79 17.99 16.23 18.34 15.67 18.9C15.11 19.46 14.76 20.02 14.5 20.68C14.25 21.32 14.08 22.05 14.03 23.11C13.98 24.17 13.97 24.5 13.97 27.23C13.97 29.96 13.98 30.29 14.03 31.35C14.08 32.41 14.25 33.14 14.5 33.78C14.76 34.44 15.11 35 15.67 35.56C16.23 36.12 16.79 36.47 17.45 36.73C18.09 36.98 18.82 37.15 19.88 37.2C20.94 37.25 21.27 37.26 24 37.26C26.73 37.26 27.06 37.25 28.12 37.2C29.18 37.15 29.91 36.98 30.55 36.73C31.21 36.47 31.77 36.12 32.33 35.56C32.89 35 33.24 34.44 33.5 33.78C33.75 33.14 33.92 32.41 33.97 31.35C34.02 30.29 34.03 29.96 34.03 27.23C34.03 24.5 34.02 24.17 33.97 23.11C33.92 22.05 33.75 21.32 33.5 20.68C33.24 20.02 32.89 19.46 32.33 18.9C31.77 18.34 31.21 17.99 30.55 17.73C29.91 17.48 29.18 17.31 28.12 17.26C27.06 17.21 26.73 17.2 24 17.2ZM24 19.03C26.69 19.03 26.99 19.04 28.03 19.09C29 19.13 29.52 19.3 29.87 19.44C30.33 19.62 30.66 19.84 31.01 20.19C31.36 20.54 31.58 20.87 31.76 21.33C31.9 21.68 32.07 22.2 32.11 23.17C32.16 24.21 32.17 24.51 32.17 27.2C32.17 29.89 32.16 30.19 32.11 31.23C32.07 32.2 31.9 32.72 31.76 33.07C31.58 33.53 31.36 33.86 31.01 34.21C30.66 34.56 30.33 34.78 29.87 34.96C29.52 35.1 29 35.27 28.03 35.31C26.99 35.36 26.69 35.37 24 35.37C21.31 35.37 21.01 35.36 19.97 35.31C19 35.27 18.48 35.1 18.13 34.96C17.67 34.78 17.34 34.56 16.99 34.21C16.64 33.86 16.42 33.53 16.24 33.07C16.1 32.72 15.93 32.2 15.89 31.23C15.84 30.19 15.83 29.89 15.83 27.2C15.83 24.51 15.84 24.21 15.89 23.17C15.93 22.2 16.1 21.68 16.24 21.33C16.42 20.87 16.64 20.54 16.99 20.19C17.34 19.84 17.67 19.62 18.13 19.44C18.48 19.3 19 19.13 19.97 19.09C21.01 19.04 21.31 19.03 24 19.03ZM24 22.08C21.17 22.08 18.88 24.37 18.88 27.2C18.88 30.03 21.17 32.32 24 32.32C26.83 32.32 29.12 30.03 29.12 27.2C29.12 24.37 26.83 22.08 24 22.08ZM24 30.49C22.18 30.49 20.71 29.02 20.71 27.2C20.71 25.38 22.18 23.91 24 23.91C25.82 23.91 27.29 25.38 27.29 27.2C27.29 29.02 25.82 30.49 24 30.49ZM30.54 21.88C30.54 22.55 30 23.09 29.33 23.09C28.66 23.09 28.12 22.55 28.12 21.88C28.12 21.21 28.66 20.67 29.33 20.67C30 20.67 30.54 21.21 30.54 21.88Z" fill="white"/></svg>
+        <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:#0A1628;font-weight:500;letter-spacing:0.5px;">Instagram</span>
+      </a>
+
+      <!-- Twitter/X -->
+      <a href="https://twitter.com/CharlieStone_Saver" target="_blank" rel="noopener" title="Twitter / X" style="display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" fill="#000000"/><path d="M26.37 22.46L33.12 15H31.52L25.66 21.46L20.96 15H15L22.08 24.78L15 32.67H16.6L22.79 25.85L27.74 32.67H33.7L26.37 22.46ZM23.6 24.9L22.88 23.9L17.18 16.17H20.19L24.24 21.9L24.96 22.9L31.52 31.56H28.51L23.6 24.9Z" fill="white"/></svg>
+        <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:#0A1628;font-weight:500;letter-spacing:0.5px;">Twitter / X</span>
+      </a>
+
+      <!-- YouTube -->
+      <a href="https://www.youtube.com/@CharlieStone_Saver" target="_blank" rel="noopener" title="YouTube" style="display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" fill="#FF0000"/><path d="M36.06 19.12C35.77 18.05 34.93 17.21 33.86 16.92C31.92 16.4 24 16.4 24 16.4C24 16.4 16.08 16.4 14.14 16.92C13.07 17.21 12.23 18.05 11.94 19.12C11.42 21.06 11.42 25.12 11.42 25.12C11.42 25.12 11.42 29.18 11.94 31.12C12.23 32.19 13.07 33 14.14 33.29C16.08 33.8 24 33.8 24 33.8C24 33.8 31.92 33.8 33.86 33.29C34.93 33 35.77 32.19 36.06 31.12C36.58 29.18 36.58 25.12 36.58 25.12C36.58 25.12 36.58 21.06 36.06 19.12ZM21.6 28.9V21.34L28.19 25.12L21.6 28.9Z" fill="white"/></svg>
+        <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:#0A1628;font-weight:500;letter-spacing:0.5px;">YouTube</span>
+      </a>
+
+      <!-- Community (Whop) -->
+      <a href="https://whop.com/charliestonesaver/" target="_blank" rel="noopener" title="Community" style="display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" fill="#0A1628"/><circle cx="18" cy="22" r="4" fill="white"/><circle cx="30" cy="22" r="4" fill="white"/><path d="M12 33C12 29.69 14.69 27 18 27H30C33.31 27 36 29.69 36 33" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:#0A1628;font-weight:500;letter-spacing:0.5px;">Community</span>
+      </a>
+
+      <!-- Telegram -->
+      <a href="https://t.me/CharlieStone_Saver" target="_blank" rel="noopener" title="Telegram" style="display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" fill="#26A5E4"/><path d="M33.94 15.36L14.44 23.06C13.16 23.58 13.17 24.3 14.21 24.62L19.21 26.19L30.62 18.96C31.16 18.63 31.65 18.8 31.24 19.16L21.83 27.61L21.51 32.75C21.97 32.75 22.17 32.53 22.43 32.28L24.67 30.12L29.73 33.85C30.68 34.37 31.36 34.11 31.59 32.98L34.95 17.02C35.28 15.63 34.41 15.01 33.94 15.36Z" fill="white"/></svg>
+        <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:#0A1628;font-weight:500;letter-spacing:0.5px;">Telegram</span>
+      </a>
+
+      <!-- Free Checklist (Gumroad) -->
+      <a href="https://charliestonesaver.gumroad.com" target="_blank" rel="noopener" title="Free Checklist" style="display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" fill="#F06449"/><path d="M24 14C18.48 14 14 18.48 14 24C14 29.52 18.48 34 24 34C29.52 34 34 29.52 34 24V22H24V25.5H30.24C29.4 28.09 27.11 30 24 30C20.13 30 17 26.87 17 23C17 19.13 20.13 16 24 16C25.72 16 27.28 16.64 28.48 17.7L30.9 15.28C29.09 13.85 26.65 13 24 14Z" fill="white"/></svg>
+        <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:#0A1628;font-weight:500;letter-spacing:0.5px;">Free Checklist</span>
+      </a>
+
+      <!-- TikTok -->
+      <a href="https://tiktok.com/@charliestonesaver" target="_blank" rel="noopener" title="TikTok" style="display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" fill="#010101"/><path d="M32.5 16.6C31.47 15.43 30.9 13.93 30.9 12.4H27.08V29.6C27.02 31.26 25.65 32.6 23.98 32.6C22.3 32.6 20.92 31.22 20.92 29.54C20.92 27.86 22.3 26.48 23.98 26.48C24.31 26.48 24.63 26.53 24.93 26.62V22.72C24.62 22.68 24.3 22.66 23.98 22.66C20.19 22.66 17.1 25.75 17.1 29.54C17.1 33.33 20.19 36.42 23.98 36.42C27.77 36.42 30.86 33.33 30.86 29.54V20.82C32.35 21.88 34.14 22.51 36.07 22.51V18.69C35.08 18.69 33.63 17.86 32.5 16.6Z" fill="white"/></svg>
+        <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:#0A1628;font-weight:500;letter-spacing:0.5px;">TikTok</span>
+      </a>
+
+      <!-- Contact -->
+      <a href="mailto:charliestonesaver@gmail.com" title="Contact" style="display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" fill="#4A5568"/><path d="M14 17H34C35.1 17 36 17.9 36 19V30C36 31.1 35.1 32 34 32H14C12.9 32 12 31.1 12 30V19C12 17.9 12.9 17 14 17Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 19L24 25.5L12 19" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:#0A1628;font-weight:500;letter-spacing:0.5px;">Contact</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">CHARLIE<span>STONE</span> SAVER</div>
+      <div class="footer-copy">© 2024 CharlieStone Saver. All rights reserved.</div>
+    </div>
+    <p class="footer-disclaimer">
+      Trading financial instruments involves substantial risk of loss. All content on this website is for educational purposes only and does not constitute financial advice. Past performance is not indicative of future results. Never risk more than you can afford to lose.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
